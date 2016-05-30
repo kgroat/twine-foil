@@ -51,5 +51,7 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
-  "engine": "node 4.2.6"
+  "engines": {
+    "node": "4.2.6"
+  }
 }

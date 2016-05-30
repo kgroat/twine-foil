@@ -27,6 +27,7 @@ app.use(function(req, res, next){
 })
 
 app.use('/dist', express.static('dist'));
+app.use(express.static('icons'));
 app.use(express.static('public'));
 
 var port = process.env.PORT || 3000;
