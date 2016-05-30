@@ -106,7 +106,7 @@ gulp.task('docs:templates', function(){
 })
 
 gulp.task('docs:static', function(){
-  return gulp.src('./docs/index.html')
+  return gulp.src('./docs/static/**/*')
     .pipe(gulp.dest('./public/'));
 })
 

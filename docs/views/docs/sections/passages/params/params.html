@@ -1,0 +1,44 @@
+
+<%
+function show(name, params) {
+  if(name === 'left' || name === 'right'){
+    $('#params-passage-1').html(params.character.name + ' went ' + name)
+  }
+}
+%>
+
+<p>
+  &nbsp; Foil passages can allow parameters to be passed between them.
+</p>
+<p>
+  This means that if you have a variable in one passage, when you call the show() method, you can pass in an object as the second parameter. The object passed in will be available in the shown passage using the variable 'params'.
+</p>
+<p>
+  To make a parameter required, you can add a tag to the passage: 'required-X' where you replace the X with the name of the required variable. For instance, if you want to make a parameter called 'character' to be required, you would add the 'required-character' tag.
+</p>
+<p>
+  If you try to show a passage with a required parameter without supplying the parameter, you will be shown an error.
+</p>
+<p>
+  Here, we have two passages called 'left' and 'right' respectively, each of which requires a parameter called 'character':
+</p>
+<div class="example">
+  <div id="params-passage-1" class="example-content">
+    <%
+    var character = { 
+      name: 'Christina'
+    }
+    %>
+    <div>Which way do you go?</div>
+    <div><button id="go-left" class="btn btn-default">Go Left</button></div>
+    <div><button id="go-right" class="btn btn-default">Go Right</button></div>
+    <%
+    $('#go-left').click(function(){ 
+      show('left', { character: character })
+    })
+    $('#go-right').click(function(){ 
+      show('right', { character: character })
+    })
+    %>
+  </div>
+</div>

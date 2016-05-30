@@ -1,7 +1,7 @@
 var HomeView = require('./home');
 
 module.exports = {
-  routes: [''],
+  routes: ['home'],
   controller: function(show){
     show(new HomeView());
   }

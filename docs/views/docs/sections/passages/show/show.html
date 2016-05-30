@@ -1,0 +1,25 @@
+
+<%
+function show(name) {
+  if(name === 'dayTwo'){
+    $('#params-passage-1').html('You wake up the next day.');
+  }
+}
+%>
+<p>
+  Foil passages have access to a helper function called 'show'.
+</p>
+<p>
+  Using this function, you can navigate to another passage within the same story.  For instance, let's say you have a passage called 'dayTwo'.  You can go from the current passage to the new passage in the following manner:
+</p>
+<div class="example">
+  <div id="params-passage-1" class="example-content">
+    <div>The sun goes down, and you find yourself growing tired.</div>
+    <div><button id="sleep" class="btn btn-default">Go to sleep</button></div>
+    <%
+    $('#sleep').click(function(){ 
+      show('dayTwo')
+    })
+    %>
+  </div>
+</div>

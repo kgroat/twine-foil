@@ -29,19 +29,9 @@
       }
       [data-section] {
         position: relative;
-        width: 0;
       }
       [data-section]>.permalink {
-        position: absolute;
-        left: -1.3em;
-        padding: 0;
-        margin: 0;
-        width: 1.3em;
-        font-size: 20px;
         display: none;
-      }
-      [data-section]:hover>.permalink {
-        display: inline-block;
       }
       .sidenav {
         width: 250px;
@@ -94,7 +84,8 @@
         color: #888888;
         border-left: 2px solid #AAAAAA;
       }
-      .example .example-result::before {
+      .example>:first-child::before {
+        display: block;
         content: 'EXAMPLE';
         font-size: 12px;
         font-weight: bold;
@@ -103,10 +94,15 @@
         margin-bottom: 10px;
         color: #888888;
       }
-      .example .example-result {
+      .example>:first-child {
         padding-top: 30px;
       }
-      .example .example-code {
+      .example.no-result .example-code {
+        padding-top: 30px;
+        border: none;
+        margin: 0;
+      }
+      .example:not(.no-result) .example-code {
         margin-bottom: 0;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
@@ -127,6 +123,66 @@
       .foil-footer a.emphasized {
         margin-right: 20px;
         font-size: 1.1em;
+      }
+      .image-icon {
+        border: 1px solid #AAAAAA;
+        cursor: pointer;
+      }
+      .image-icon:not(.expanded) {
+        width: 100px;
+      }
+      .copy, .copy .copy-target {
+        color: #444444;
+        text-decoration: underline;
+        cursor: pointer;
+        border: none;
+      }
+      .copy .copy-target:focus {
+        color: #444444;
+        text-decoration: underline;
+        cursor: pointer;
+        border: none;
+        outline: none;
+      }
+      .copy .after {
+        content: "Click to copy";
+        padding: 2px;
+        margin-left: 10px;
+        color: #AAAAAA;
+        background: #222222;
+        border-radius: 4px;
+      }
+      .copy:hover, .copy:hover .copy-target {
+        color: #888888;
+      }
+      @media(min-width: 992px){
+        [data-section]:hover>.permalink {
+          display: inline-block;
+          position: absolute;
+          left: -1.3em;
+          padding: 0;
+          margin: 0;
+          width: 1.3em;
+          font-size: 20px;
+        }
+        .api .api-item .api-item-description {
+          margin-top: -10px;
+          margin-bottom: -10px;
+          padding-top: 10px;
+          padding-bottom: 10px;
+          border-left: solid 1px #AAAAAA;
+        }
+      }
+      @media(max-width: 991px){
+        *[data-section]>.permalink {
+          display: inline-block;
+          position: absolute;
+          right: 0;
+          padding: 0;
+          margin: 0;
+          width: 1.3em;
+          font-size: 20px;
+        }
       }
     </style>
   </head>

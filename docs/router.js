@@ -30,7 +30,12 @@ function processConfig(config, name){
     newArguments.push.apply(newArguments, arguments);
     newArguments.splice(0, 0,
     function show(view, region){
-      app.rootView.showChildView(region || 'main', view);
+      var region = app.rootView.getRegion(region || 'main');
+      region.empty();
+      if(window.location.hash.split('/').length === 1){
+        document.body.scrollTop = 0;
+      }
+      region.show(view);
     },
     function getRegion(region){
       return app.rootView.getRegion(region || 'main');
@@ -58,7 +63,7 @@ _.each(routeConfigs, function(file){
 
 appRoutes['*route'] = '_default';
 appController['_default'] = function(){
-  Backbone.history.navigate('', { trigger: true });
+  Backbone.history.navigate('home', { trigger: true });
 };
 
 var AppRouter = Marionette.AppRouter.extend({

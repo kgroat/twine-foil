@@ -1,8 +1,7 @@
-var Marionette = require('backbone.marionette');
-var loadTemplate = require('../../../../helpers/loadTemplate');
+var DocsView = require('../../../../helpers/docsView');
 
-var ScriptsView = Marionette.ItemView.extend({
-  template: loadTemplate('views/docs/sections/scripts/scripts.html')
+var ScriptsView = DocsView.extend({
+  template: 'views/docs/sections/scripts/scripts.html'
 }, {
   title: 'Scripts'
 })

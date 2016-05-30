@@ -13,11 +13,19 @@ var SidenavView = require('../sidenav/sidenav');
 
 var sections = [
   { name:'passages', view: require('./sections/passages/passages'), subSections: [
-    { name: 'jquery', view: require('./sections/passages/jquery/jquery') }
+    { name: 'jquery', view: require('./sections/passages/jquery/jquery') },
+    { name: 'underscore', view: require('./sections/passages/underscore/underscore') },
+    { name: 'show', view: require('./sections/passages/show/show') },
+    { name: 'params', view: require('./sections/passages/params/params') },
+    { name: 'embed', view: require('./sections/passages/embed/embed') },
   ] },
   { name:'scripts', view: require('./sections/scripts/scripts'), subSections: [
-    { name: 'custom', view: require('./sections/scripts/custom/custom') }
+    //{ name: 'custom', view: require('./sections/scripts/custom/custom') }
   ] },
+  { name:'framework', view: require('./sections/framework/framework'), subSections: [
+    { name: 'story', view: require('./sections/framework/story/story') }
+  ] },
+  { name:'plugins', view: require('./sections/plugins/plugins') },
 ];
 
 var DocsView = Marionette.LayoutView.extend({

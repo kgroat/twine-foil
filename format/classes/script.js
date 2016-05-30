@@ -19,7 +19,7 @@ Script.prototype.exists = function($el){
 
 Script.prototype.render = function(){
   var script = this;
-  var fullText = scriptHelpers.build(this.text, this.name, this.name);
+  var fullText = scriptHelpers.build(this.text, './'+this.name, this.name);
   return $(fullText);
 }
 

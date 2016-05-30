@@ -1,1 +1,29 @@
-<div>SCRIPTS</div>
+<p>
+  Scripts in Foil allow you to define reusable JavaScript helpers that can be used in your passages or within other scripts.
+</p>
+<p>
+  Scripts use <a href="http://wiki.commonjs.org/wiki/Modules/1.1">CommonJS style modules</a>, which allow you to define an object and have it be exposed by either setting it as module.exports or by setting properties on the exports variable.
+</p>
+<p>
+  You can create scripts by creating a passage and giving it the 'script' tag.
+</p>
+<p>
+  Here is an example of setting properties on the exports variable:
+</p>
+<div class="example no-result">
+  function Character(options){ 
+    this.name = options.name;
+  }
+  exports.asCharacter = function(character){ 
+    return new Character(character);
+  };
+</div>
+<p>
+  You could also just export the Character constructor function directly:
+</p>
+<div class="example no-result">
+  function Character(options){ 
+    this.name = options.name;
+  }
+  module.exports = Character;
+</div>

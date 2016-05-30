@@ -40,7 +40,7 @@ var ContentView = Marionette.CollectionView.extend({
     });
     if(_.all(mapping, function(map){ return map.offset === 0 })){ return ''; }
     for(var i=0; i<mapping.length; i++){
-      if(mapping[i].offset > (scroll+55)){
+      if(mapping[i].offset > (scroll+145)){
         if(i === 0){ return '' }
         return mapping[i-1].name;
       }

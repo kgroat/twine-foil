@@ -30,6 +30,9 @@ Passage.prototype.render = function(params){
     _: _,
     require: definer,
     params: params,
+    show: function(name, params, skipHistory){
+      definer('story').show(name, params, skipHistory);
+    },
     embed: function(passage){ 
       if(typeof passage !== 'object'){
         passage = definer('story').getPassage(passage);

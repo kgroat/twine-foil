@@ -17,8 +17,8 @@
   <%
     var i=0;
     var sounds = ['BANG!', 'THUD!', 'CRACK!', 'WALLOP!']
-    setInterval(function(){
-      //$('#sound-effect').html(sounds[(i++) % sounds.length]);
+    setInterval(function(){ 
+      $('#sound-effect').html(sounds[(i++) % sounds.length]);
     }, 1000)
   %>
 </div>
@@ -32,16 +32,16 @@
     Goblins are short, green creatures with sharp teeth.  They covet anything and everything shiny.
   </p>
   <%
-    $('#goblin-hover').hover(function(){
+    $('#goblin-hover').hover(function(){ 
       $('#goblin-details').show();
-    }, function(){
+    }, function(){ 
       $('#goblin-details').hide();
     })
     
-    $('#goblin-hit').click(function clickHandler(ev){
-      ev.preventDefault();
-      var diceValue = parseInt(Math.random()*20)+1;
-      $('#goblin-attack-details').html('You rolled a '+diceValue+'!');
+    $('#goblin-hit').click(function clickHandler(ev){ 
+      ev.preventDefault(); 
+      var diceValue = parseInt(Math.random()*20)+1; 
+      $('#goblin-attack-details').html('You rolled a '+diceValue+'!'); 
       $('#goblin-hit').hide().off('click', clickHandler);
     });
   %>

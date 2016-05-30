@@ -10,42 +10,11 @@ var scrollToSection = require('../../helpers/scrollToSection');
 var ContentView = require('../content/content');
 var SidenavView = require('../sidenav/sidenav');
 
-var subSections = require('./sections/*/*.js', {
-  mode: function(base, files, config){
-    var mods = files.map(function(file){
-      var name;
-      var match = /^\.?\/?sections\/([^\/]*)\/[^\/]+\.js$/.exec(file);
-      if(match){
-        name = match[1];
-      } else {
-        throw new Error('Something went horribly wrong');
-      }
-      return '{ view: require("' + file + '"), name: "' + name + '" }';
-    });
-    return '[' + mods.join(', ') + ']';
-  }
-});
-
-var subSubSections = require('./sections/*/*/*.js', {
-  mode: function(base, files, config){
-    var mods = files.map(function(file){
-      var base, name;
-      var match = /^\.?\/?sections\/([^\/]*)\/([^\/]*)\/[^\/]+\.js$/.exec(file);
-      if(match){
-        base = match[1];
-        name = match[2];
-      } else {
-        throw new Error('Something went horribly wrong');
-      }
-      return '{ view: require("' + file + '"), base: "' + base + '", name: "' + name + '" }';
-    });
-    return '[' + mods.join(', ') + ']';
-  }
-})
-
-_.each(subSections, function(section){
-  section.subSections = _.where(subSubSections, { base: section.name });
-})
+var sections = [
+  { name:'adding', view: require('./sections/adding/adding'), subSections: [
+    { name: 'story', view: require('./sections/adding/story/story') }
+  ] },
+];
 
 var GuideView = Marionette.LayoutView.extend({
   template: loadTemplate('views/guide/guide.html'),
@@ -62,8 +31,8 @@ var GuideView = Marionette.LayoutView.extend({
     $(window).off('scroll', this.onScroll);
   },
   onRender: function(){
-    this.sidenavView = new SidenavView({ sections: subSections, base: 'guide' });
-    this.contentView = new ContentView({ sections: subSections, base: 'guide' });
+    this.sidenavView = new SidenavView({ sections: sections, base: 'guide' });
+    this.contentView = new ContentView({ sections: sections, base: 'guide' });
     this.showChildView('content', this.contentView);
     this.showChildView('sidenav', this.sidenavView);
     generatePermalinks(this.$el, 'guide');
