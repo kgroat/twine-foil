@@ -1,0 +1,10 @@
+{
+  "name": "Foil",
+  "version": "0.1.0",
+  "author": "Kevin Groat",
+  "description": "A minimalistic story format for Twine 2.",
+  "image": "icon.svg",
+  "url": "https://twine-foil.herokuapp.com/",
+  "license": "ISC",
+  "proofing": false
+}

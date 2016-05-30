@@ -1,0 +1,48 @@
+<p>
+  Foil comes pre-baked with <a href="https://jquery.com/">jQuery</a>, so that you can manipulate the html in your text as you are writing it.
+</p>
+<p>
+  In your passages, you'll have access to a variable called '$' which will be a copy of jQuery which is bound to the scope of the current passage.  
+</p>
+<div class="example">
+  This <span id="jquery-test">did not</span> get updated.
+  <% $('#jquery-test').html('did') %>
+</div>
+<p>
+  This can be used to create text that changes with time by utilizing the <a href="http://www.w3schools.com/jsref/met_win_settimeout.asp">setTimeout()</a> and <a href="http://www.w3schools.com/jsref/met_win_setinterval.asp">setInterval()</a> JavaScript funcitons.
+</p>
+<div class="example">
+  <div id="sound-effect">BANG!</div>
+  The muggers continued to hit the struggling man.
+  <%
+    var i=0;
+    var sounds = ['BANG!', 'THUD!', 'CRACK!', 'WALLOP!']
+    setInterval(function(){
+      //$('#sound-effect').html(sounds[(i++) % sounds.length]);
+    }, 1000)
+  %>
+</div>
+<p>
+  It can also be used to register event handlers on elements, such as by using the jQuery <a href="https://api.jquery.com/click/">click()</a> or <a href="https://api.jquery.com/hover/">hover()</a> funcitons.
+</p>
+<div class="example">
+  There is a <span id="goblin-hover" style="border-bottom:1px dotted #888888;cursor:help">goblin</span> here. <button id="goblin-hit" class="btn btn-default">Hit it!</button>
+  <div id="goblin-attack-details"></div>
+  <p id="goblin-details" style="display:none">
+    Goblins are short, green creatures with sharp teeth.  They covet anything and everything shiny.
+  </p>
+  <%
+    $('#goblin-hover').hover(function(){
+      $('#goblin-details').show();
+    }, function(){
+      $('#goblin-details').hide();
+    })
+    
+    $('#goblin-hit').click(function clickHandler(ev){
+      ev.preventDefault();
+      var diceValue = parseInt(Math.random()*20)+1;
+      $('#goblin-attack-details').html('You rolled a '+diceValue+'!');
+      $('#goblin-hit').hide().off('click', clickHandler);
+    });
+  %>
+</div>

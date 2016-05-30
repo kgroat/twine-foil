@@ -1,0 +1,14 @@
+<p>
+  Passages in Foil use a templating pattern similar to <a href="http://twinery.org/forum/discussion/1600">Snowman</a> that allows you to write JavaScript embedded directly in your text.  Unlike Snowman, however, Foil does not use Markdown syntax.  All html must be written by hand, and is interpreted as-is.
+</p>
+<p>
+  You can use the syntax <code>&amp;lt;% ... %&amp;gt;</code> to execute any JavaScript statement while the passage is being rendered. Simply replace the contained <code>...</code> with the statement you would like executed, and it will be run when the passage is rendered. If you would like the results of the JavaScript statement to be printed into the passage, use the <code>&amp;lt;%= ... %&amp;gt;</code> syntax instead.
+</p>
+<div class="example">
+  <%
+  var sayHello = function(name) {
+    return 'Hello, ' + name;
+  }
+  %>
+  This is my greeting: <%= sayHello('world') %>
+</div>
