@@ -3,6 +3,8 @@ var $ = require('jquery');
 var define = require('../definer').define.raw;
 var scriptHelpers = require('../helpers/scriptHelpers');
 
+var Extender = require('../helpers/extender');
+
 function Script(options){
   options = options || {};
   
@@ -22,6 +24,8 @@ Script.prototype.render = function(){
   var fullText = scriptHelpers.build(this.text, './'+this.name, this.name);
   return $(fullText);
 }
+
+Script = Extender(Script);
 
 module.exports = Script;
 define('script.class', Script);

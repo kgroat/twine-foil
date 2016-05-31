@@ -3,6 +3,8 @@ var definer = require('../definer');
 var define = definer.define.raw;
 var scriptHelpers = require('../helpers/scriptHelpers');
 
+var Extender = require('../helpers/extender');
+
 function Plugin(options){
   options = options || {};
   this.id = options.id || 0;
@@ -102,6 +104,8 @@ Plugin.prototype.run = function(){
     }
   });
 }
+
+Plugin = Extender(Plugin);
 
 module.exports = Plugin;
 define('plugin.class', Plugin);

@@ -6,6 +6,8 @@ var define = definer.define.raw;
 var DeferredJQ = require('../helpers/deferredJQ');
 var renderLinks = require('../helpers/renderLinks');
 
+var Extender = require('../helpers/extender');
+
 function Passage(options){
   options = options || {};
   this.id = options.id || 0;
@@ -84,6 +86,8 @@ Passage.prototype.render = function(params){
   
   return output;
 }
+
+Passage = Extender(Passage);
 
 module.exports = Passage;
 define('passage.class', Passage);

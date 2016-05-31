@@ -10,6 +10,8 @@ require('./passage');
 require('./script');
 require('./stylesheet');
 
+var Extender = require('../helpers/extender');
+
 function Story(options){
   options = options || {};
   var story = this;
@@ -70,10 +72,6 @@ function Story(options){
   });
   
   return this;
-}
-
-Story.extend = function(extension){
-  
 }
 
 Story.prototype.start = function(){
@@ -337,6 +335,8 @@ Story.prototype.loadFromSave = function(save){
   $.event.trigger('after:loadFromSave');
   return this;
 }
+
+Story = Extender(Story);
 
 module.exports = Story;
 define('story.class', Story);

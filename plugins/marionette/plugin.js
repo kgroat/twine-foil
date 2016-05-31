@@ -11,15 +11,12 @@ function plugin(){
     var Backbone = require('backbone');
     var Marionette = require('marionette');
     
-    function Passage(options){
-      options = options || {};
+    var Passage = require('passage.class');
+    
+    Passage.addExtension('constructor', function(next, options){
+      next();
       
-      this.id = options.id || 0;
-      this.name = options.name || '';
-      this.tags = options.tags || [];
-      this.requiredParameters = options.requiredParameters || [];
-      
-      var text = options.text || '';
+      var text = this.text || '';
       text = text.replace(/\n/g, ' ');
       
       var template;
@@ -140,7 +137,7 @@ function plugin(){
       extension.template = template;
       
       this.View = this.View.extend(extension, static);
-    }
+    })
     
     Passage.prototype.render = function(params){
       var View = this.View;
@@ -169,9 +166,14 @@ function plugin(){
       return wasDestroyed;
     }
     
-    define('passage.class', Passage);
-    
     var Story = definer('story.class');
+    
+    Story.addExtension('show', function(next){
+      if(this.passage){
+        this.passage.destroyView();
+      }
+      next();
+    })
     
     var oldShow = Story.prototype.show;
     Story.prototype.show = function(passageName, params, noHistory){

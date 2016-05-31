@@ -1,5 +1,7 @@
 var define = require('../definer').define.raw;
 
+var Extender = require('../helpers/extender');
+
 function Stylesheet(options){
   options = options || {};
   
@@ -8,6 +10,8 @@ function Stylesheet(options){
   this.tags = options.tags || [];
   this.text = options.text || '';
 }
+
+Stylesheet = Extender(Stylesheet);
 
 module.exports = Stylesheet;
 define('stylesheet.class', Stylesheet);
