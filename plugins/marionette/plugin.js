@@ -140,17 +140,10 @@ function plugin(){
     })
     
     Passage.prototype.render = function(params){
-      var View = this.View;
-      var passage = this;
-      
       this.destroyView();
+      this.checkParams(params);
       
-      _.each(this.requiredParams, function(key){
-        if(params[key] === undefined){
-          throw new Error('Parameter "' + key + '" is required for passage "' + passage.name + '".');
-        }
-      })
-      
+      var View = this.View;
       this.view = new View(params);
       this.view.passage = this;
       this.view.render();
@@ -164,25 +157,15 @@ function plugin(){
         this.view.destroy();
       }
       return wasDestroyed;
-    }
+    };
     
     var Story = definer('story.class');
     
-    Story.addExtension('show', function(next){
-      if(this.passage){
+    Story.addExtension('show', function(){
+      if(this.passage && typeof this.passage.destroyView === 'function'){
         this.passage.destroyView();
       }
-      next();
-    })
-    
-    var oldShow = Story.prototype.show;
-    Story.prototype.show = function(passageName, params, noHistory){
-      if(this.passage){
-        this.passage.destroyView();
-      }
-      return this.passage = oldShow.call(this, passageName, params, noHistory);
-    };
-  });
+    });
 }
 
 plugin.pre = [];

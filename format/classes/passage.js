@@ -17,13 +17,16 @@ function Passage(options){
   this.text = options.text || '';
 }
 
-Passage.prototype.render = function(params){
+Passage.prototype.checkParams = function(params){
   _.each(this.requiredParams, function(key){
     if(params[key] === undefined){
       throw new Error('Parameter "' + key + '" is required for passage "' + passage.name + '".');
     }
   });
-  
+};
+
+Passage.prototype.render = function(params){
+  this.checkParams(params);
   var scripts = [], styles = [], dones = [];
   
   var jq = new DeferredJQ();

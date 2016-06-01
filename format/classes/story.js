@@ -13,6 +13,7 @@ require('./stylesheet');
 var Extender = require('../helpers/extender');
 
 function Story(options){
+  debugger;
   options = options || {};
   var story = this;
   var el = options.el || '#story';
@@ -334,6 +335,10 @@ Story.prototype.loadFromSave = function(save){
   this.back(true);
   $.event.trigger('after:loadFromSave');
   return this;
+}
+
+Story.prototype.isDebugMode = function(){
+  return this.$el.attr('options').indexOf('debug') >= 0;
 }
 
 Story = Extender(Story);

@@ -57,6 +57,9 @@ function Extender(OldType){
         return getExtended(key, original);
       }
       return original;
+    },
+    set: function(target, key, val){
+      return target[key] = val;
     }
   }
   

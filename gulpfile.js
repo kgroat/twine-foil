@@ -1,6 +1,5 @@
 var gulp = require('gulp');
 var browserify = require('browserify');
-var rimraf = require('gulp-rimraf');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
@@ -8,13 +7,12 @@ var rename = require('gulp-rename');
 var through = require('through2');
 var stripComments = require('gulp-strip-comments');
 var fs = require('fs');
-var insert = require('gulp-insert');
-var concat = require('gulp-concat');
+var del = require('del');
 
 gulp.task('default', ['all']);
 
 gulp.task('all', ['clean'], function(done){
-  gulp.start('build', 'icon', 'plugins', 'docs', 'lisence', done);
+  gulp.start('build', 'icon', 'plugins', 'lisence', done);
 })
 
 gulp.task('lisence', function(){
@@ -29,11 +27,10 @@ gulp.task('build', ['js'], function(){
     .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('watch', ['build', 'icon', 'plugins', 'docs', 'lisence'], function(){
+gulp.task('watch', ['build', 'icon', 'plugins', 'lisence'], function(){
   gulp.watch('./format/**/*', ['build']);
   gulp.watch('./icon.svg', ['icon']);
   gulp.watch('./plugins/**/*', ['plugins']);
-  gulp.watch('./docs/**/*', ['docs']);
   gulp.watch('./lisence.txt', ['lisence']);
 })
 
@@ -64,52 +61,11 @@ gulp.task('icon', function(){
     .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('clean', function(){
-  return gulp.src(['./dist/**/*', './tmp/**/*', './public/**/*'], { read: false })
-    .pipe(rimraf());
-});
-
-gulp.task('docs', ['docs:js', 'docs:static']);
-
-gulp.task('docs:js', ['docs:templates'], function(){
-  // set up the browserify instance on a task basis
-  var b = browserify({
-    entries: './docs/index.js',
-    debug: true,
-    // defining transforms here will avoid crashing your stream
-    transform: [require('require-globify')]
+gulp.task('clean', function(done){
+  del(['./dist', './tmp']).then(function(){
+    done();
   });
-
-  return b.bundle()
-    .pipe(source('index.js'))
-    .pipe(buffer())
-    //.pipe(uglify())
-    .pipe(stripComments())
-    .pipe(gulp.dest('./public'));
-})
-
-gulp.task('docs:templates', function(){
-  return gulp.src(['./docs/**/*.html', '!./docs/index.html'])
-    .pipe(insert.transform(function(contents, file){
-      var escaped = contents
-        .replace(/"/g, '\\"')
-        .replace(/\n/g, '\\n')
-        .replace(/\s+\\n|\\n\s+/g, '\\n')
-        .replace(/\s{2,}/g, ' ');
-      return '  "'+file.relative+'":"'+escaped+'",';
-    }))
-    .pipe(concat('templates.js'))
-    .pipe(insert.transform(function(contents){
-      return 'module.exports = {\n'+contents+'\n};';
-    }))
-    .pipe(gulp.dest('./tmp/'));
-})
-
-gulp.task('docs:static', function(){
-  return gulp.src('./docs/static/**/*')
-    .pipe(gulp.dest('./public/'));
-})
-
+});
 
 
 function getFileContents(filename) {
