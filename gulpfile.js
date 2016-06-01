@@ -9,6 +9,8 @@ var stripComments = require('gulp-strip-comments');
 var fs = require('fs');
 var del = require('del');
 
+var version = require('./package.json').version;
+
 gulp.task('default', ['all']);
 
 gulp.task('all', ['clean'], function(done){
@@ -24,7 +26,8 @@ gulp.task('build', ['js'], function(){
   return gulp.src('./tmp/index.js')
     .pipe(buildFormat('./format/format.json', './format/index.html', './tmp/index.js'))
     .pipe(rename('format.js'))
-    .pipe(gulp.dest('./dist'));
+    .pipe(gulp.dest('./dist/'+version))
+    .pipe(gulp.dest('./dist/latest'));
 });
 
 gulp.task('watch', ['build', 'icon', 'plugins', 'lisence'], function(){
@@ -58,7 +61,8 @@ gulp.task('plugins', function(){
 
 gulp.task('icon', function(){
   return gulp.src('icon.svg')
-    .pipe(gulp.dest('./dist'));
+    .pipe(gulp.dest('./dist/'+version))
+    .pipe(gulp.dest('./dist/latest'));
 });
 
 gulp.task('clean', function(done){
