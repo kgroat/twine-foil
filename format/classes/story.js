@@ -9,6 +9,7 @@ var Plugin = require('./plugin');
 require('./passage');
 require('./script');
 require('./stylesheet');
+require('./state');
 
 var Extender = require('../helpers/extender');
 
@@ -24,16 +25,12 @@ function Story(options){
   this.$output = $(output);
   var $story = (this.$el.is('tw-storydata') ? this.$el : this.$el.find('tw-storydata'));
   
-  
   this.startNode = parseInt($story.attr('startnode'));
   this.passages = [];
   this.scripts = [];
   this.stylesheets = [];
   this.plugins = [];
   this.pluginRegistrationPromises = [];
-  
-  this.state = options.state || {};
-  this.history = options.history || [];
   
   var $plugins = $story.find('tw-passagedata[tags*="plugin"]');
   $plugins.each(function(){
@@ -42,9 +39,6 @@ function Story(options){
   
   if(defineOut){
     define('story', this);
-    define('state', this.state);
-    define('history', this.history);
-    window.story = this;
   }
   
   var $userScripts = $story.find('script[type="text/twine-javascript"]');
@@ -71,6 +65,16 @@ function Story(options){
       }
     });
   });
+  
+  var State = definer('state.class');
+  
+  this.state = new State(options.state);
+  this.history = options.history || [];
+  
+  if(defineOut){
+    define('state', this.state);
+    define('history', this.history);
+  }
   
   return this;
 }
@@ -325,7 +329,8 @@ Story.prototype.registerPluginFromUrl = function(url){
 
 Story.prototype.loadFromSave = function(save){
   $.event.trigger('before:loadFromSave');
-  this.state = save.state;
+  var State = definer('state.class');
+  this.state = new State(save.state);
   this.history = save.history;
   if(definer('story') === this){
     definer('state', this.state);
