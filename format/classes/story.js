@@ -10,6 +10,7 @@ require('./passage');
 require('./script');
 require('./stylesheet');
 require('./state');
+require('./history');
 
 var Extender = require('../helpers/extender');
 
@@ -67,9 +68,10 @@ function Story(options){
   });
   
   var State = definer('state.class');
+  var History = definer('history.class');
   
   this.state = new State(options.state);
-  this.history = options.history || [];
+  this.history = new History(options.history);
   
   if(defineOut){
     define('state', this.state);
@@ -84,6 +86,10 @@ Story.prototype.start = function(){
   return this.initializationPromise.then(function(){
     story.renderGlobalScripts().show(story.startNode);
   });
+}
+
+Story.prototype.restart = function(){
+  return this.loadFromSave({ state: {}, history: [] });
 }
 
 Story.prototype.runPlugins = function(){
@@ -183,24 +189,31 @@ Story.prototype.show = function(passageName, params, noHistory){
   $.event.trigger('show', { passageName: passageName, passage: passage, params: params });
   this.$output.html(passage.render(params));
   if(!noHistory){
-    this.history.push({ name: passageName, params: params });
+    this.history.push(passageName, params);
   }
   $.event.trigger('after:show', { passageName: passageName, passage: passage, params: params });
   return passage;
 };
 
-Story.prototype.back = function(skipPop){
-  if(!skipPop){
-    this.history.pop();
-  }
-  if(!this.history.length){
-    this.show(this.startNode);
-  } else {
-    var historyRecord = this.history[this.history.lenth-1];
+Story.prototype.back = function(){
+  var historyRecord = this.history.back();
+  if(historyRecord){
     this.show(historyRecord.name, historyRecord.params, true);
+  } else {
+    this.show(this.startNode);
   }
   return this;
-}
+};
+
+Story.prototype.refresh = function(){
+  var historyRecord = this.history.peek();
+  if(historyRecord){
+    this.show(historyRecord.name, historyRecord.params, true);
+  } else {
+    this.show(this.startNode);
+  }
+  return this;
+};
 
 Story.prototype.addPassage = function(passage){
   var Passage = definer('passage.class');
@@ -328,17 +341,18 @@ Story.prototype.registerPluginFromUrl = function(url){
 }
 
 Story.prototype.loadFromSave = function(save){
-  $.event.trigger('before:loadFromSave');
+  $.event.trigger('before:loadFromSave', { state: save.state, history: save.history });
   var State = definer('state.class');
+  var History = definer('history.class');
   this.state = new State(save.state);
-  this.history = save.history;
+  this.history = new History(save.history);
   if(definer('story') === this){
     definer('state', this.state);
     definer('history', this.history);
   }
-  $.event.trigger('loadFromSave');
-  this.back(true);
-  $.event.trigger('after:loadFromSave');
+  $.event.trigger('loadFromSave', { state: this.state, history: this.history });
+  this.refresh();
+  $.event.trigger('after:loadFromSave', { state: this.state, history: this.history });
   return this;
 }
 
