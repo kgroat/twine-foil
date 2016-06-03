@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/kgroat/twine-foil/issues"
   },
-  "homepage": "https://twine-foil.herokuapp.com/",
+  "homepage": "https://foil.kevingroat.io/",
   "browserify": {},
   "dependencies": {
     "browserify": "^13.0.1",
