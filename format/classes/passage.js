@@ -1,8 +1,9 @@
 var $ = require('jquery');
 var _ = require('underscore');
 
-var definer = require('../definer');
-var define = definer.define.raw;
+var definerObj = require('../definer');
+var definer = definerObj.require;
+var define = definerObj.define.raw;
 var DeferredJQ = require('../helpers/deferredJQ');
 var renderLinks = require('../helpers/renderLinks');
 

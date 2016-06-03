@@ -31,9 +31,11 @@ function defineRaw(req, exports){
 };
 
 definer.raw = raw;
-definer.define = define;
-definer.define.raw = defineRaw;
+define.raw = defineRaw;
 
 window.definer = definer;
 
-module.exports = definer;
+module.exports = {
+  require: definer,
+  define: define
+};

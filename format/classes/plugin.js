@@ -1,6 +1,7 @@
 var $ = require('jquery');
-var definer = require('../definer');
-var define = definer.define.raw;
+var definerObj = require('../definer');
+var definer = definerObj.require;
+var define = definerObj.define.raw;
 var scriptHelpers = require('../helpers/scriptHelpers');
 
 var Extender = require('../helpers/extender');
@@ -65,7 +66,7 @@ Plugin.prototype.run = function(){
   var plugin = this;
   return new Promise(function(resolve, reject){
     if(plugin.$script){ return resolve(plugin); }
-    var $script = scriptHelpers.build(plugin.text, plugin.name, './plugins/'+plugin.name);
+    var $script = scriptHelpers.build(plugin.text, plugin.name, './plugins/'+plugin.name, true);
     $('head').append($script);
     var pluginFunction = definer('./plugins/'+plugin.name);
     if(pluginFunction.pre){ plugin.pre = pluginFunction.pre; }
