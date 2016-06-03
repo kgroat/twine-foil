@@ -5,8 +5,8 @@ var renderLinks = require('renderLinks');
 
 function plugin(){
   var plugin = this;
-  return this.requestScript('https://twine-foil.herokuapp.com/dist/plugins/marionette/backbone.js', 'backbone').then(function(){
-    return plugin.requestScript('https://twine-foil.herokuapp.com/dist/plugins/marionette/marionette.js', 'marionette');
+  return this.requestScript('https://foil.kevingroat.io/dist/plugins/marionette/backbone.js', 'backbone').then(function(){
+    return plugin.requestScript('https://foil.kevingroat.io/dist/plugins/marionette/marionette.js', 'marionette');
   }).then(function(){
     var Backbone = require('backbone');
     var Marionette = require('marionette');

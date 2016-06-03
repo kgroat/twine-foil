@@ -4,7 +4,7 @@
   "author": "Kevin Groat",
   "description": "A minimalistic story format for Twine 2.",
   "image": "icon.svg",
-  "url": "https://twine-foil.herokuapp.com/",
+  "url": "https://foil.kevingroat.io/",
   "license": "ISC",
   "proofing": false
 }
