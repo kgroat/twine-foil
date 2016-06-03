@@ -14,15 +14,17 @@ function save(saveName, description, story){
   description = (description || (new Date()).toUTCString()).toString();
   story = story || definer('story');
   
-  $.event.trigger("before:save", { saveName: originalName, description: description, story: story });
+  var isNewSave = hasSave(originalName);
+  
+  $.event.trigger("before:save", { saveName: originalName, description: description, story: story, isNewSave: isNewSave });
   saveName = mapSaveName(saveName);
   var hash = hashSave(story);
   
-  $.event.trigger("save", { saveName: originalName, description: description, story: story, hash: hash });
+  $.event.trigger("save", { saveName: originalName, description: description, story: story, isNewSave: isNewSave, hash: hash });
   localStorage.setItem(saveName, hash);
   
   var wasNewSave = addSave(originalName, description);
-  $.event.trigger("after:save", { saveName: originalName, description: description, story: story, hash: hash, wasNewSave: wasNewSave });
+  $.event.trigger("after:save", { saveName: originalName, description: description, story: story, isNewSave: isNewSave, hash: hash });
   return this;
   
 }
@@ -40,7 +42,7 @@ function load(saveName, story){
   $.event.trigger("load", { saveName: saveName, story: story, save: save });
   story.loadFromSave(save);
   
-  $.event.trigger("after:load", { saveName: saveName, story: story, hash: hash });
+  $.event.trigger("after:load", { saveName: saveName, story: story, save: save });
   return this;
 }
 
@@ -63,14 +65,17 @@ function getSaves(){
 }
 
 function hasQuicksave(){
+  return hasSave(quicksaveName);
+}
+
+function hasSave(saveName){
   var saves = getSaves();
-  return !!_.findWhere(saves, { id: quicksaveName });
+  return _.some(saves, function(save){ return save.id === saveName });
 }
 
 function deleteSave(saveName){
   $.event.trigger('before:delete', { saveName: saveName });
   saveName = mapSaveName(saveName);
-  $.event.trigger('delete', { saveName: saveName });
   localStorage.removeItem(saveName);
   $.event.trigger('after:delete', { saveName: saveName });
   return this;
@@ -78,14 +83,11 @@ function deleteSave(saveName){
 
 function clear(){
   $.event.trigger('before:clear');
-  var willClear = window.confirm('Are you sure you want to clear all of your saves?  They cannot be recovered.');
-  if(willClear){
-    var saves = getSaves();
-    $.event.trigger('clear', { saves: saves });
-    _.each(saves, function(save){ deleteSave(save.id) });
-    localStorage.removeItem(savesListLocation);
-  }
-  $.event.trigger('after:clear', { cleared: willClear });
+  var saves = getSaves();
+  $.event.trigger('clear', { saves: saves });
+  _.each(saves, function(save){ deleteSave(save.id) });
+  localStorage.removeItem(savesListLocation);
+  $.event.trigger('after:clear', { saves: saves });
 }
 
 var saveStorage = {

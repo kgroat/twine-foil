@@ -15,13 +15,12 @@ function Script(options){
 }
 
 Script.prototype.exists = function($el){
-  $el = $el || $('head');
-  return scriptHelpers.getExisting($el).length > 0;
+  $el = $el || $(document);
+  return scriptHelpers.getExisting($el, this.name).length > 0;
 }
 
 Script.prototype.render = function(){
-  var script = this;
-  var fullText = scriptHelpers.build(this.text, './'+this.name, this.name);
+  var fullText = scriptHelpers.build(this.text, this.name, './'+this.name);
   return $(fullText);
 }
 

@@ -11,6 +11,11 @@ function Stylesheet(options){
   this.text = options.text || '';
 }
 
+Script.prototype.render = function(){
+  var fullText = '<style>'+this.text+'</style>';
+  return $(fullText);
+}
+
 Stylesheet = Extender(Stylesheet);
 
 module.exports = Stylesheet;
