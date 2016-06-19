@@ -14,7 +14,7 @@ function buildScript(original, url, name, allowDefine){
         'var require = window.definer;\n'+
         (allowDefine ? 'var define = window.definer.raw;\n' : '')+
         original + '\n'+
-        (name ? 'window.definer("'+name+'", module)\n' : '')+
+        (name ? 'window.define("'+name+'", module)\n' : '')+
       '})()\n//# sourceURL=' + url+
     '</script>');
 }
