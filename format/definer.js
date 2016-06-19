@@ -34,6 +34,7 @@ definer.raw = raw;
 define.raw = defineRaw;
 
 window.definer = definer;
+window.define = define;
 
 module.exports = {
   require: definer,
