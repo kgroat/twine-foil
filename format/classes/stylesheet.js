@@ -11,7 +11,7 @@ function Stylesheet(options){
   this.text = options.text || '';
 }
 
-Script.prototype.render = function(){
+Stylesheet.prototype.render = function(){
   var fullText = '<style>'+this.text+'</style>';
   return $(fullText);
 }
