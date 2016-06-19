@@ -12,7 +12,7 @@ function buildScript(original, url, name, allowDefine){
         'var exports = {};\n'+
         'var module = {exports:exports};\n'+
         'var require = window.definer;\n'+
-        (allowDefine ? 'var define = window.definer.define.raw;\n' : '')+
+        (allowDefine ? 'var define = window.definer.raw;\n' : '')+
         original + '\n'+
         (name ? 'window.definer.define("'+name+'", module)\n' : '')+
       '})()\n//# sourceURL=' + url+
