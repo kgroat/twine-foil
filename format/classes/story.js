@@ -181,18 +181,20 @@ Story.prototype.show = function(passageName, params, noHistory){
     noHistory = params;
     params = undefined;
   }
-  $.event.trigger('before:show', { passageName: passageName, params: params });
+  $.event.trigger('before:show', { story: this, passageName: passageName, params: params });
   var passage = this.getPassage(passageName);
   if(!passage){
     throw new Error('Cannot find passage "'+passageName+'".');
   }
   define('passage', passage);
-  $.event.trigger('show', { passageName: passageName, passage: passage, params: params });
-  this.$output.html(passage.render(params));
+  $.event.trigger('show', { story: this, passageName: passageName, passage: passage, params: params });
+  var passageOutput = passage.render(params);
+  passageOutput.attr('id', 'passage');
+  this.$output.html(passageOutput);
   if(!noHistory){
     this.history.push(passageName, params);
   }
-  $.event.trigger('after:show', { passageName: passageName, passage: passage, params: params });
+  $.event.trigger('after:show', { story: this, passageName: passageName, passage: passage, params: params, output: passageOutput });
   return passage;
 };
 
