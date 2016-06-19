@@ -52,7 +52,7 @@ Passage.prototype.render = function(params){
   var compiled = _.template('<div>' + this.text + '</div>');
   var output = compiled(local);
   
-  output = renderLinks(output);
+  output = this.renderLinks(output);
   
   output = $(output);
   jq.apply(output).then(function(){}, function(err){
@@ -90,6 +90,15 @@ Passage.prototype.render = function(params){
   
   return output;
 }
+Story.prototype.render.resultStrategy = Extender.strategies.latest;
+
+Story.prototype.renderLinks = function(input){
+  return renderLinks(input, this.renderSingleLink);
+};
+Story.prototype.renderLinks.resultStrategy = Extender.strategies.latest;
+
+Story.prototype.renderSingleLink = renderLinks.single;
+Story.prototype.renderSingleLink.resultStrategy = Extender.strategies.latest;
 
 Passage = Extender(Passage);
 

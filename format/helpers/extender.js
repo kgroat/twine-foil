@@ -18,15 +18,18 @@ function Extender(OldType){
     if(typeof original !== 'function' || !(map.has(name))){
       return original;
     }
+
+    var resultStrategy = original.resultStrategy || defaultResultStrategy;
+
     function callExtended(){
       var target = this;
       var calledArgs = [];
       calledArgs.push.apply(calledArgs, arguments);
       var extensions = map.get(name);
       var i=0;
-      var output, extOut;
+      var output, extOuts = [];
       
-      function callNext(){
+      function callNext(shouldReturn){
         if(i >= extensions.length) {
           output = original.apply(target, calledArgs);
           return;
@@ -40,11 +43,13 @@ function Extender(OldType){
         }
         var newArgs = calledArgs.slice(0, calledArgs.length);
         newArgs.splice(0, 0, next);
-        var extOut = extensions[i].apply(target, newArgs) || extOut;
+        extOuts.push(extensions[i].apply(target, newArgs));
         next();
-        return output || extOut;
+        if(shouldReturn){
+          return resultStrategy(output, extOuts);
+        }
       }
-      return callNext();
+      return callNext(true);
     }
     
     return callExtended;
@@ -91,6 +96,29 @@ function Extender(OldType){
   
   return NewType;
 }
+
+function defaultResultStrategy(originalOutput, extensionOutputs){
+  return originalOutput || extensionOutputs.reduce(function(lastOut, currOut){ return currOut || lastOut; }, null);
+}
+
+function latestResultStrategy(originalOutput, extensionOutputs){
+  return extensionOutputs.reduce(function(lastOut, currOut){ return currOut || lastOut; }, null) || originalOutput;
+}
+
+function earliestResultStrategy(originalOutput, extensionOutputs){
+  return originalOutput || extensionOutputs.reduce(function(lastOut, currOut){ return lastOut || currOut; }, null);
+}
+
+function earliestBesidesOriginalResultStrategy(originalOutput, extensionOutputs){
+  return extensionOutputs.reduce(function(lastOut, currOut){ return lastOut || currOut; }, null) || originalOutput;
+}
+
+Extender.strategies = {
+  default: defaultResultStrategy,
+  latest: latestResultStrategy,
+  earliest: earliestResultStrategy,
+  earliestBesidesOriginal: earliestBesidesOriginalResultStrategy
+};
 
 module.exports = Extender;
 define('extender', Extender);
