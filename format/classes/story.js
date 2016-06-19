@@ -50,7 +50,7 @@ function Story(options){
     var script = $userScript.html();
     var url = 'user-script' + ($userScripts.length>1 ? '-' + idx : '') + '.js';
     script = scriptHelpers.build(script, url);
-    eval(script);
+    $('head').append(script);
   });
   
   this.initializationPromise = this.finishRegisteringPlugins().then(function(){
