@@ -17,7 +17,6 @@ require('./history');
 var Extender = require('../helpers/extender');
 
 function Story(options){
-  debugger;
   options = options || {};
   var story = this;
   var el = options.el || '#story';
