@@ -3,6 +3,7 @@ var _ = require('underscore');
 var base64 = require('lz-string');
 var cycle = require('json-cycle');
 
+var scriptHelpers = require('../helpers/scriptHelpers');
 var definerObj = require('../definer');
 var definer = definerObj.require;
 var define = definerObj.define.raw;
@@ -48,7 +49,7 @@ function Story(options){
     var $userScript = $(this);
     var script = $userScript.html();
     var url = 'user-script' + ($userScripts.length>1 ? '-' + idx : '') + '.js';
-    script = '(function(){\n'+script+'\n})()\n//# sourceURL=' + url;
+    script = scriptHelpers.build(script, url);
     eval(script);
   });
   
