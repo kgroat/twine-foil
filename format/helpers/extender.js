@@ -32,7 +32,7 @@ function Extender(OldType){
       function callNext(){
         if(i >= extensions.length) {
           output = original.apply(target, calledArgs);
-          return;
+          return output;
         }
         var hasBeenCalled = false;
         var nextResult;
