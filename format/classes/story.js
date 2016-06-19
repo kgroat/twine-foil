@@ -51,6 +51,14 @@ function Story(options){
     script = scriptHelpers.build(script, url);
     $('head').append(script);
   });
+
+  var $userStylesheets = $story.find('style[type="text/twine-css"]');
+  $userStylesheets.each(function(idx){
+    var $userStylesheet = $(this);
+    var style = $userStylesheet.html();
+    style = '<style>' + style + '</style>';
+    $('head').append(style);
+  })
   
   this.initializationPromise = this.finishRegisteringPlugins().then(function(){
     return story.runPlugins();
