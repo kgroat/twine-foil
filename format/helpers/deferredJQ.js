@@ -6,6 +6,8 @@ function DeferredJQ(){
   if(!(this instanceof DeferredJQ)){
     return new DeferredJQ();
   }
+
+  var $parent;
   var self = this;
   var count = 0;
   var decrementCount;
@@ -99,6 +101,7 @@ function DeferredJQ(){
   
   var queryPromise = new Promise(function(resolve, reject){
     self.apply = function($el){
+      $parent = $el;
       resolve($el);
       return countPromise;
     };
@@ -106,13 +109,16 @@ function DeferredJQ(){
       reject(err);
       return countPromise;
     };
-  })
+  });
   
   this.$ = function jqlite(selector){
+    if(typeof selector !== 'string' || isHtml(selector)){
+      return $(selector);
+    }
+    if($parent){
+      return $parent.find(selector);
+    }
     return deferred(queryPromise.then(function($el){
-      if(typeof selector !== 'string' || isHtml(selector)){
-        return $(selector);
-      }
       return $el.find(selector);
     }));
   }
