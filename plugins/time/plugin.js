@@ -9,30 +9,38 @@ function plugin(){
   var ticksPerDay = 48;
   var timeName = 'time';
   var morningBegins = 4;
-  var eveningBegins = ;
+  var eveningBegins = 20;
+  var nightBegins = 36;
   
   function getTime(tmpTimeName){
-    return require('state')[tmpTimeName || timeName] || 0;
+    return require('state').get(tmpTimeName || timeName) || 0;
   }
   
   function setTime(newTime, tmpTimeName){
-    return require('state')[tmpTimeName || timeName] = newTime || 0;
+    return require('state').set(tmpTimeName || timeName, newTime || 0);
   }
   
   function incrementTime(increment, tmpTimeName){
     increment = typeof increment === 'number' ? increment : 1;
-    return rsetTime(getTime(tmpTimeName) + increment, tmpTimeName);
+    return setTime(getTime(tmpTimeName) + increment, tmpTimeName);
   }
   
   function tick(count, tmpTimeName){
     count = typeof count === 'number' ? count : 1;
-    incrementTime(coun, tmpTimeName);
+    var currentTime = getTime(tmpTimeName);
+    listeners.forEach(function(cb){
+      cb(count, currentTime);
+    })
+    incrementTime(count, tmpTimeName);
   }
   
   function timeConfig(options){
     options = options || {};
     ticksPerDay = options.ticksPerDay || ticksPerDay;
     timeName = options.timeName || timeName;
+    morningBegins = options.morningBegins || morningBegins;
+    eveningBegins = options.eveningBegins || eveningBegins;
+    nightBegins = options.nightBegins || nightBegins;
   }
   
   function onTick(cb){
@@ -53,12 +61,51 @@ function plugin(){
   }
   
   function getDate(tmpTimeName){
-    return require('state')[tmpTimeName || timeName] || 0;
+    var time = getTime(tmpTimeName);
+    return Math.floor(time / ticksPerDay);
   }
   
-  define('tick', tick);
-  define('timeConfig', timeConfig);
-  define('getTime', getTime);
+  function getTimeOfDay(tmpTimeName){
+    var time = getTime(tmpTimeName);
+    return time % ticksPerDay;
+  }
+
+  function isMorning(tmpTimeName){
+    var time = getTime(tmpTimeName);
+    return rangeCheck(time, morningBegins, eveningBegins);
+  }
+
+  function isEvening(tmpTimeName){
+    var time = getTime(tmpTimeName);
+    return rangeCheck(time, eveningBegins, nightBegins);
+  }
+
+  function isNight(tmpTimeName){
+    var time = getTime(tmpTimeName);
+    return rangeCheck(time, nightBegins, morningBegins);
+  }
+
+  function rangeCheck(current, min, max){
+    if(min < max){
+      return current >= min && current < max;
+    } else {
+      return current >= min || current < max;
+    }
+  }
+  
+  var time = {
+    tick: tick,
+    onTick: onTick,
+    offTick: offTick,
+    get: getTime,
+    getDate: getDate,
+    getTimeOfDay: getTimeOfDay,
+    isMorning: isMorning,
+    isEvening: isEvening,
+    isNight: isNight
+  }
+
+  define('time', time);
 }
 
 plugin.pre = [];

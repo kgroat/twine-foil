@@ -29,27 +29,26 @@ function Extender(OldType){
       var i=0;
       var output, extOuts = [];
       
-      function callNext(shouldReturn){
+      function callNext(){
         if(i >= extensions.length) {
           output = original.apply(target, calledArgs);
           return;
         }
         var hasBeenCalled = false;
+        var nextResult;
         function next(){
-          if(hasBeenCalled){ return; }
+          if(hasBeenCalled){ return nextResult; }
           hasBeenCalled = true;
           i++;
-          callNext()
+          return nextResult = callNext()
         }
         var newArgs = calledArgs.slice(0, calledArgs.length);
         newArgs.splice(0, 0, next);
         extOuts.push(extensions[i].apply(target, newArgs));
         next();
-        if(shouldReturn){
-          return resultStrategy(output, extOuts);
-        }
+        return resultStrategy(output, extOuts);
       }
-      return callNext(true);
+      return callNext();
     }
     
     return callExtended;
