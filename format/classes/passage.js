@@ -90,15 +90,15 @@ Passage.prototype.render = function(params){
   
   return output;
 }
-Story.prototype.render.resultStrategy = Extender.strategies.latest;
+Passage.prototype.render.resultStrategy = Extender.strategies.latest;
 
-Story.prototype.renderLinks = function(input){
+Passage.prototype.renderLinks = function(input){
   return renderLinks(input, this.renderSingleLink);
 };
-Story.prototype.renderLinks.resultStrategy = Extender.strategies.latest;
+Passage.prototype.renderLinks.resultStrategy = Extender.strategies.latest;
 
-Story.prototype.renderSingleLink = renderLinks.single;
-Story.prototype.renderSingleLink.resultStrategy = Extender.strategies.latest;
+Passage.prototype.renderSingleLink = renderLinks.single;
+Passage.prototype.renderSingleLink.resultStrategy = Extender.strategies.latest;
 
 Passage = Extender(Passage);
 
