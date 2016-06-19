@@ -23,7 +23,7 @@ Plugin.prototype.requestStyle = function(url){
     if(existing.length){
       return resolve(existing);
     }
-    existing = $('<link href="' + url + '" />');
+    existing = $('<link href="' + url + '" rel="stylesheet" />');
     plugin.story.$el.append(existing);
     return resolve(existing);
   })
