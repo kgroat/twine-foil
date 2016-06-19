@@ -1,12 +1,13 @@
 
-var define = require('../definer').define.raw;
+var define = require('../definer').define;
 
 function getExistingScript($el, url){
   return $el.find('script[title="' + url + '"]');
 }
 
 function buildScript(original, url, name, allowDefine){
-  return $(
+  window.define = define;
+  var output = $(
     '<script title="' + url + '">'+
       '(function(){\n'+
         'var exports = {};\n'+
@@ -14,9 +15,11 @@ function buildScript(original, url, name, allowDefine){
         'var require = window.definer;\n'+
         (allowDefine ? 'var define = window.definer.raw;\n' : '')+
         original + '\n'+
-        (name ? 'window.definer("'+name+'", module)\n' : '')+
+        (name ? 'window.define("'+name+'", module)\n' : '')+
       '})()\n//# sourceURL=' + url+
     '</script>');
+  delete window.define;
+  return output;
 }
 
 var scriptHelpers = {
@@ -25,4 +28,4 @@ var scriptHelpers = {
 };
 
 module.exports = scriptHelpers;
-define('scriptHelpers', scriptHelpers);
+define.raw('scriptHelpers', scriptHelpers);
